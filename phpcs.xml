@@ -36,6 +36,7 @@
 
 	<rule ref="PEAR.NamingConventions">
 		<exclude name="PEAR.NamingConventions.ValidClassName.Invalid" />
+		<exclude name="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
 	</rule>
 	<rule ref="PEAR.NamingConventions.ValidFunctionName">
 		<exclude name="PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps" />

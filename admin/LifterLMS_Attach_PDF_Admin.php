@@ -35,11 +35,7 @@ class LifterLMS_Attach_PDF_Admin {
 		 * Load CMB
 		 */
 		require_once( LAP_PLUGIN_ROOT . 'admin/includes/LAP_CMB.php' );
-		/*
-		 * All the extras functions
-		 */
-		require_once( LAP_PLUGIN_ROOT . 'admin/includes/LAP_Extras_Admin.php' );
-	}
+    }
 	/**
 	 * Return an instance of this class.
 	 *

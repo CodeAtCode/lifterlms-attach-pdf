@@ -18,20 +18,19 @@ class LifterLMS_Attach_PDF {
 	 * @var object
 	 */
 	private static $instance;
-	
+
 	/**
 	 * Initialize the plugin by setting localization and loading public scripts
 	 * and styles.
 	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function initialize() {
-			require_once( LAP_PLUGIN_ROOT . 'public/includes/LAP_Enqueue.php' );
-			require_once( LAP_PLUGIN_ROOT . 'public/includes/LAP_Extras.php' );
-			}
-	
+        add_action( 'lifterlms_view_order_table_body', array( __CLASS__, 'add_pdf' ) );
+    }
+
 	/**
 	 * Return an instance of this class.
 	 *
@@ -54,12 +53,24 @@ class LifterLMS_Attach_PDF {
 		}
 		return self::$instance;
 	}
+
+    public static function add_pdf() {
+        global $wp;
+        $label = get_option( LAP_TEXTDOMAIN . '-settings', true );
+
+        if ( !isset( $label[ 'attach_pdf_label' ] ) ) {
+            $label = array();
+            $label[ 'attach_pdf_label' ] = 'Invoice';
+        }
+
+        $pdf = get_post_meta( $wp->query_vars['orders'], '_llms_attached_pdf', true );
+
+        if ( !empty( $pdf ) ) {
+            echo '<tr><th>';
+            echo '<a href="' . $pdf . '">' . $label[ 'attach_pdf_label' ] . '</a>';
+            echo '</th></tr>';
+        }
+    }
 }
-/*
- * @TODO:
- *
- * - 9999 is used for load the plugin as last for resolve some
- *   problems when the plugin use API of other plugins, remove
- *   if you don' want this
- */
+
 add_action( 'plugins_loaded', array( 'LifterLMS_Attach_PDF', 'get_instance' ), 9999 );

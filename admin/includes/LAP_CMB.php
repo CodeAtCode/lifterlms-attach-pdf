@@ -41,8 +41,12 @@ class Lap_CMB {
 							) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'PDF', LAP_TEXTDOMAIN ),
-            'id' => $prefix . LAP_TEXTDOMAIN . '_text',
-			'type' => 'text',
+            'id' => '_llms_attached_pdf',
+			'type' => 'file',
+	        'query_args' => array(
+        		'type' => 'application/pdf', // Make library only display PDFs.
+        	),
+            'preview_size' => 'large',
 		) );
     }
 }
