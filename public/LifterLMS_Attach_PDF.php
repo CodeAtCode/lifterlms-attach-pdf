@@ -28,7 +28,7 @@ class LifterLMS_Attach_PDF {
 	 * @return void
 	 */
 	public static function initialize() {
-        add_action( 'lifterlms_view_order_table_body', array( __CLASS__, 'add_pdf' ) );
+		add_action( 'lifterlms_view_order_table_body', array( __CLASS__, 'add_pdf' ) );
     }
 
 	/**
@@ -56,19 +56,16 @@ class LifterLMS_Attach_PDF {
 
     public static function add_pdf() {
         global $wp;
-        $label = get_option( LAP_TEXTDOMAIN . '-settings', true );
+		
+		$pdfs = get_post_meta( $wp->query_vars['orders'], '_llms_attach_pdf_group', true );
 
-        if ( !isset( $label[ 'attach_pdf_label' ] ) ) {
-            $label = array();
-            $label[ 'attach_pdf_label' ] = 'Invoice';
-        }
-
-        $pdf = get_post_meta( $wp->query_vars['orders'], '_llms_attached_pdf', true );
-
-        if ( !empty( $pdf ) ) {
-            echo '<tr><th>';
-            echo '<a href="' . $pdf . '">' . $label[ 'attach_pdf_label' ] . '</a>';
-            echo '</th></tr>';
+        if ( !empty( $pdfs ) ) {
+			foreach ( (array) $pdfs as $key => $entry ) {
+				echo '<tr><th>';
+				echo '<a href="' . $entry['_llms_attach_pdf_url'] . '">' . $entry[ '_llms_attach_pdf_name' ] . '</a>';
+				echo '</th></tr>'; 
+			}
+            
         }
     }
 }
