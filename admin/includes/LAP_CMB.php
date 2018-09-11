@@ -50,6 +50,7 @@ class Lap_CMB {
 				'remove_button' => __( 'Rimuovi Fattura', LAP_TEXTDOMAIN ),
 				'sortable' => false
 			),
+			'after_group' => array( $this, 'repeatable_title' ),
 		) );
 		$cmb_pdfs->add_group_field( $cmb_pdfs_group, array(
 			'id' => $prefix . 'name',
@@ -67,5 +68,47 @@ class Lap_CMB {
 		) );
 		
     }
+    
+    public function repeatable_title() {
+        ?>
+        <script type="text/javascript">
+            (function($) {
+                var $box = $( document.getElementById( '_llms_attach_pdf_metabox' ) );
+                var replaceTitles = function() {
+                    $box.find( '.cmb-group-title' ).each( function() {
+                        var $this = $( this );
+                        var txt = $this.next().find( '[id$="name"]' ).val();
+                        var rowindex;
+                        if ( ! txt ) {
+                            txt = $box.find( '[data-grouptitle]' ).data( 'grouptitle' );
+                            if ( txt ) {
+                                rowindex = $this.parents( '[data-iterator]' ).data( 'iterator' );
+                                txt = txt.replace( '{#}', ( rowindex + 1 ) );
+                            }
+                        }
+                        if ( txt ) {
+                            $this.text( txt );
+                        }
+                    });
+                };
+                var replaceOnKeyUp = function( evt ) {
+                    var $this = $( evt.target );
+                    var id = 'title';
+                    if ( evt.target.id.indexOf(id, evt.target.id.length - id.length) !== -1 ) {
+                        console.log( 'val', $this.val() );
+                        $this.parents( '.cmb-row.cmb-repeatable-grouping' ).find( '.cmb-group-title' ).text( $this.val() );
+                    }
+                };
+                $box
+                    .on( 'cmb2_add_row cmb2_shift_rows_complete', function( evt ) {
+                        replaceTitles();
+                    })
+                    .on( 'keyup', replaceOnKeyUp );
+                replaceTitles();
+            })( jQuery );
+        </script>
+        <?php
+    }
 }
+
 new Lap_CMB();
